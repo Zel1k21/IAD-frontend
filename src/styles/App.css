@@ -1,0 +1,21 @@
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-content {
+    flex: 1;
+    padding-top: var(--navbar-height);
+    min-height: calc(100vh - 80px);
+    width: 100%;
+}
+
+/* Ensure content is properly spaced */
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .app-content {
+        padding-top: 70px;
+    }
+}

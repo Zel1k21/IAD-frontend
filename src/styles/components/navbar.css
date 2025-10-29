@@ -1,0 +1,49 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--navbar-height);
+    background-color: var(--background-color);
+    box-shadow: 0 0.25rem 0.25rem 0 var(--black-text);
+    gap: 1rem;
+    padding: 0 3rem;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+.navbar .container {
+    display: flex;
+    align-items: center;
+    color: var(--black-text);
+    font-size: var(--title-font-size);
+    font-weight: 600;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.navbar-brand-img {
+    height: 50%;
+}
+
+.navbar .stages-link {
+    color: var(--black-text);
+    font-size: var(--big-font-size);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.navbar .stages-link:hover {
+    color: var(--primary-color);
+}
+
+.navbar .stages-link.active {
+    color: var(--primary-color);
+}

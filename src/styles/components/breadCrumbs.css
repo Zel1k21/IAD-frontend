@@ -1,0 +1,36 @@
+.breadCrumbs {
+    display: flex;
+    position: absolute;
+    top: 40%;
+    left: 21%;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--medium-font-size);
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.breadCrumbItem {
+    display: inline-block;
+    margin: 0;
+}
+
+.breadCrumbItem a,
+.breadCrumbCurrent {
+    text-decoration: none;
+    color: inherit;
+}
+
+.breadCrumbLink {
+    color: #007bff; /* например */
+}
+
+.breadCrumbLink:hover {
+    text-decoration: underline;
+}
+
+.slash {
+    color: #6c757d; /* серый цвет для слэша */
+}

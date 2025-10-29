@@ -1,0 +1,71 @@
+.card {
+    background-color: var(--card-background-color);
+    border-radius: var(--border-radius);
+    border-color: var(--black-text);
+    height: var(--card-height);
+}
+
+.card .stage-card {
+    width: var(--card-width);
+    flex-direction: column;
+    object-fit: cover;
+    aspect-ratio: 1;
+    display: flex;
+}
+
+.card .card-image {
+    width: 15rem;
+    height: 7.5rem;
+    margin-left: calc(100% / 10);
+    object-fit: contain;
+    margin-bottom: 0.3rem;
+    margin-top: 0.3rem;
+}
+
+.card .card-title {
+    font-size: var(--big-font-size);
+    font-weight: 500;
+    width: 11rem;
+    max-width: 11rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 4.375rem;
+    font-weight: 500;
+}
+
+.card .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 0rem;
+}
+
+.card .btn {
+    height: var(--button-height);
+    width: var(--button-width);
+    display: flex;
+    cursor: pointer;
+    border-radius: var(--button-border-radius);
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--medium-font-size);
+    font-weight: 500;
+}
+
+.card .add-btn {
+    background-color: var(--black-text);
+    color: var(--background-color);
+}
+
+.card .details-btn {
+    background-color: var(--background-color);
+    color: var(--black-text);
+    border-width: 0.1rem;
+    border-color: var(--black-text);
+    border-style: solid;
+    margin-top: 0.5rem;
+}
