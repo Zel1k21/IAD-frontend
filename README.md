@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# CO2 Emission calculator Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React приложение для расчета углеродных выбросов при производстве товаров.
 
-Currently, two official plugins are available:
+## Описание
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Веб-приложение для просмотра списка этапов и расчета углеродных выбросов. Приложение включает в себя:
 
-## React Compiler
+- Главную страницу со статическим описанием
+- Страницу списка услуг (этапов) с фильтрацией
+- Страницу детальной информации об этапе
+- Навигационную панель и хлебные крошки
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Технологии
 
-## Expanding the ESLint configuration
+- React 19
+- TypeScript
+- React Bootstrap
+- React Router
+- Vite
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Установка и запуск
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Установите зависимости:
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. Запустите приложение в режиме разработки:
+```bash
+npm run dev
 ```
+
+Приложение будет доступно по адресу: `http://localhost:3000`
+
+## Сборка для продакшена
+
+```bash
+npm run build
+```
+
+## Особенности
+
+- Проксирование запросов для решения CORS
+- Fallback на mock-данные при недоступности бэкенда
+- Адаптивный дизайн с Bootstrap
+- Фильтрация ламп по названию и мощности
+- Дефолтные изображения для карточек
+
+## API
+
+Приложение использует API бэкенда по адресу `http://localhost:8001/api`. Основные эндпоинты:
+
+- `GET /api/stages` - получение списка ламп
+- `GET /api/stages/{id}` - получение информации о конкретной лампе
+
+## Структура проекта
+
+```
+src/
+├── components/     # React компоненты
+├── pages/          # Страницы приложения
+├── styles/         # Стили страниц
+├── modules.ts      # Модули приложения
+```
+
+## Разработка
+
+Для разработки убедитесь, что бэкенд сервис запущен на порту 8001, либо приложение будет использовать mock-данные.
