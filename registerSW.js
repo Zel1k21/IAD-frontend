@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/IAD-frontend/sw.js', { scope: '/IAD-frontend/' })})}
