@@ -31,7 +31,7 @@ export const InputField: FC<Props> = ({
       <div className="search-image">
         <input
           type="image"
-          src="/search-sign.svg"
+          src="search-sign.svg"
           className="search-icon submit"
           onClick={onSubmit}
         />

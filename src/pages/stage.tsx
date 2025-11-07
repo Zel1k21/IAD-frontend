@@ -84,10 +84,10 @@ export const StagePage: FC = () => {
       <div className="page-stage--content">
         <img
           className="page-stage--image"
-          src={stage.image_url || "/stock.jpg"}
+          src={stage.image_url || "stock.jpg"}
           alt={stage.title}
           onError={(e) => {
-            e.currentTarget.src = "/stock.jpg";
+            e.currentTarget.src = "stock.jpg";
           }}
         />
         <p className="page-stage--description">{stage.description}</p>

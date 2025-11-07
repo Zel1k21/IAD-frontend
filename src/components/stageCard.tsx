@@ -15,7 +15,7 @@ export const StageCard: FC<Props> = ({
   const handleImageError = (
     e: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
-    e.currentTarget.src = "/stock.jpg";
+    e.currentTarget.src = "stock.jpg";
   };
 
   return (
@@ -23,7 +23,7 @@ export const StageCard: FC<Props> = ({
       <Card.Img
         className="card-image"
         variant="top"
-        src={image_url || "/stock.jpg"}
+        src={image_url || "stock.jpg"}
         height={100}
         width={100}
         onClick={buttonClickHandler}

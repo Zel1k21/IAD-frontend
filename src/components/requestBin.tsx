@@ -16,7 +16,7 @@ export const RequestBin: FC<RequestBinProps> = ({ stageRequestID }) => {
     >
       <img
         className="stage-request-button"
-        src="/request_bin.png"
+        src="request_bin.png"
         alt="Request Bin"
       />
     </Link>

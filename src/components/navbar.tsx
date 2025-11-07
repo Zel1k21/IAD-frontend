@@ -63,7 +63,7 @@ const Navbar: React.FC = () => {
         <Container>
           <BootstrapNavbar.Brand>
             <Nav.Link as={Link} to="/" active={location.pathname === "/"}>
-              <img className="navbar-brand-img" src="/Logo.svg" />
+              <img className="navbar-brand-img" src="Logo.svg" />
             </Nav.Link>
             Расчет углеродного следа
           </BootstrapNavbar.Brand>

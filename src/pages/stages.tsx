@@ -57,8 +57,7 @@ export const StagesPage: FC = () => {
 
   return (
     <div className={`container ${loading && "containerLoading"}`}>
-      {/*<BreadCrumbs crumbs={crumbs} />*/}
-      <img className="page-stages--image" src="/factory.jpg" />
+      <img className="page-stages--image" src="factory.jpg" />
 
       <div className="top-bar">
         <InputField

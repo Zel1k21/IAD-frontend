@@ -14,7 +14,7 @@ const MOCK_STAGES: Stages[] = [
   {
     id: 1,
     title: "Добыча",
-    image_url: "/stock.jpg",
+    image_url: "stock.jpg",
     description: "Этап добычи полезных ископаемых.",
   },
   {
@@ -26,7 +26,7 @@ const MOCK_STAGES: Stages[] = [
   {
     id: 3,
     title: "Транспортировка",
-    image_url: "/stock.jpg",
+    image_url: "stock.jpg",
     description: "Доставка продукции к потребителю.",
   },
 ];
@@ -54,7 +54,7 @@ export const getStageByName = async (
       // Ensure all stages have fallback images
       const resultsWithFallback = data.map((stage: Stages) => ({
         ...stage,
-        image_url: stage.image_url || "/stock.jpg",
+        image_url: stage.image_url || "stock.jpg",
       }));
       return {
         stagesCount: resultsWithFallback.length,
@@ -64,7 +64,7 @@ export const getStageByName = async (
       // Ensure all stages have fallback images
       const resultsWithFallback = (data.results || []).map((stage: Stages) => ({
         ...stage,
-        image_url: stage.image_url || "/stock.jpg",
+        image_url: stage.image_url || "stock.jpg",
       }));
       return {
         stagesCount: data.stagesCount || 0,
@@ -77,7 +77,7 @@ export const getStageByName = async (
     // Ensure mock stages have fallback images
     const mockStagesWithFallback = MOCK_STAGES.map((stage) => ({
       ...stage,
-      image_url: stage.image_url || "/stock.jpg",
+      image_url: stage.image_url || "stock.jpg",
     }));
     return {
       stagesCount: mockStagesWithFallback.length,
@@ -106,7 +106,7 @@ export const getStageByID = async (id: number): Promise<Stages | null> => {
     // Ensure image_url has fallback
     const stageWithFallback = {
       ...data,
-      image_url: data.image_url || "/stock.jpg",
+      image_url: data.image_url || "stock.jpg",
     };
     return stageWithFallback;
   } catch (error) {
@@ -116,7 +116,7 @@ export const getStageByID = async (id: number): Promise<Stages | null> => {
     if (mockStage) {
       return {
         ...mockStage,
-        image_url: mockStage.image_url || "/stock.jpg",
+        image_url: mockStage.image_url || "stock.jpg",
       };
     }
     return mockStage;

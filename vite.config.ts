@@ -20,4 +20,5 @@ export default defineConfig({
     strictPort: true,
   },
   plugins: [react()],
+  base: "/IAD-frontend/",
 });
