@@ -20,7 +20,7 @@ const MOCK_STAGES: Stages[] = [
   {
     id: 2,
     title: "Переработка",
-    image_url: "/stock.jpg",
+    image_url: "stock.jpg",
     description: "Переработка сырья на заводах.",
   },
   {
