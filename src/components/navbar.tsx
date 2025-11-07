@@ -6,9 +6,29 @@ import { ROUTES } from "./routes";
 import "../styles/main.css";
 import { getStageByID } from "../modules/emissionAPI";
 
+const useScreenSize = () => {
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
+
+  return isSmallScreen;
+};
+
 const Navbar: React.FC = () => {
   const location = useLocation();
   const [stageTitle, setStageTitle] = useState<string | null>(null);
+  const isSmallScreen = useScreenSize();
 
   const generateBreadcrumbs = (): { label: string; path?: string }[] => {
     const pathnames = location.pathname.split("/").filter((x) => x);
@@ -63,15 +83,16 @@ const Navbar: React.FC = () => {
         <Container>
           <BootstrapNavbar.Brand>
             <Nav.Link as={Link} to="/" active={location.pathname === "/"}>
-              <img className="navbar-brand-img" src="Logo.svg" />
+              <img className="navbar-brand-img" src="logo.svg" />
             </Nav.Link>
             Расчет углеродного следа
           </BootstrapNavbar.Brand>
-          {crumbs.length > 0 && (
-            <Container className="breadCrumbs">
-              <BreadCrumbs crumbs={crumbs} />
-            </Container>
-          )}
+          {crumbs.length > 0 &&
+            !(isSmallScreen && location.pathname.includes("/stages/")) && (
+              <Container className="breadCrumbs">
+                <BreadCrumbs crumbs={crumbs} />
+              </Container>
+            )}
           <BootstrapNavbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link

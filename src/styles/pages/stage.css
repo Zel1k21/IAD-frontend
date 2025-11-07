@@ -9,14 +9,17 @@
     font-size: var(--title-font-size);
     font-weight: 600;
     margin-top: 0.5rem;
+    text-align: center;
+    padding: 0 1rem;
 }
 
 .page-stage .page-stage--content {
     display: flex;
     flex-direction: row;
-    width: 55.5rem;
+    width: 100%;
+    max-width: 55.5rem;
     margin-top: 2rem;
-    height: 12rem;
+    min-height: 12rem;
     background-color: var(--card-background-color);
     border-radius: var(--border-radius);
 }
@@ -28,7 +31,111 @@
     object-fit: cover;
 }
 
+.loadingBg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    width: 100%;
+}
+
+.error-message {
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+}
+
+.error-message h2 {
+    font-size: var(--title-font-size);
+    margin-bottom: 1rem;
+    color: #dc3545;
+}
+
+.error-message p {
+    font-size: var(--medium-font-size);
+    color: #6c757d;
+}
+
+@media (max-width: 768px) {
+    .loadingBg {
+        min-height: 150px;
+    }
+
+    .error-message {
+        padding: 1.5rem;
+    }
+
+    .error-message h2 {
+        font-size: var(--big-font-size);
+    }
+}
+
+@media (max-width: 480px) {
+    .loadingBg {
+        min-height: 120px;
+    }
+
+    .error-message {
+        padding: 1rem;
+    }
+
+    .error-message h2 {
+        font-size: var(--medium-font-size);
+    }
+
+    .error-message p {
+        font-size: var(--small-font-size);
+    }
+}
+
 .page-stage .page-stage--description {
     margin-top: 1.5rem;
     font-size: var(--small-font-size);
+    padding: 0 1rem 1rem 0;
+}
+
+@media (max-width: 768px) {
+    .page-stage .page-stage--content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        min-height: auto;
+        padding: 1rem;
+    }
+
+    .page-stage .page-stage--image {
+        width: 80%;
+        height: auto;
+        max-width: 200px;
+        margin: 0 0 1rem 0;
+    }
+
+    .page-stage .page-stage--description {
+        margin-top: 0.5rem;
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-stage .page-stage--title {
+        font-size: var(--big-font-size);
+        text-align: center;
+        padding: 0 1rem;
+    }
+
+    .page-stage .page-stage--content {
+        margin-top: 1rem;
+        padding: 0.5rem;
+    }
+
+    .page-stage .page-stage--image {
+        width: 90%;
+        max-width: 150px;
+    }
+
+    .page-stage .page-stage--description {
+        font-size: var(--small-font-size);
+        padding: 0 0.5rem;
+    }
 }

@@ -34,3 +34,16 @@
 .slash {
     color: #6c757d; /* серый цвет для слэша */
 }
+
+@media (max-width: 800px) {
+    .breadCrumbs {
+        left: 18%;
+    }
+}
+
+/* Hide breadcrumbs on stage page for small screens */
+@media (max-width: 768px) {
+    .page-stage .breadCrumbs {
+        display: none !important;
+    }
+}

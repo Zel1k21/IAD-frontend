@@ -16,7 +16,7 @@
 .card .card-image {
     width: 15rem;
     height: 7.5rem;
-    margin-left: calc(100% / 10);
+    margin-left: 1%;
     object-fit: contain;
     margin-bottom: 0.3rem;
     margin-top: 0.3rem;
