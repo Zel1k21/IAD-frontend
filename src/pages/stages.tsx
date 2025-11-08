@@ -1,59 +1,37 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import type { FC } from "react";
 import { Spinner } from "react-bootstrap";
-import type { Stages } from "../modules/emissionAPI";
-import { getStageByName } from "../modules/emissionAPI";
 import { InputField } from "../components/inputField";
 import { StageCard } from "../components/stageCard";
-import { RequestBin } from "../components/requestBin";
 import { useNavigate } from "react-router-dom";
-// import { BreadCrumbs } from "../components/breadCrumbs";
-// import { ROUTES } from "../components/routes";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setSearchValue } from "../store/stagesSlice";
+import { fetchStages, searchStages } from "../store/stagesThunks";
 
 export const StagesPage: FC = () => {
-  const [searchValue, setSearchValue] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [stages, setStage] = useState<Stages[]>([]);
+  const dispatch = useAppDispatch();
+  const { searchValue, loading, stages } = useAppSelector(
+    (state) => state.stagesFilter,
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadStages = async () => {
-      setLoading(true);
-      try {
-        const response = await getStageByName("");
-        const results = response?.results || [];
-        setStage(results);
-      } catch (error) {
-        console.error("Load stages error:", error);
-        setStage([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadStages();
-  }, []);
+    if (stages.length === 0) {
+      dispatch(fetchStages(""));
+    }
+  }, [dispatch, stages.length]);
 
   const handleSearch = async () => {
-    setLoading(true);
-    try {
-      const response = await getStageByName(searchValue);
-      console.log("API Response:", response);
-      const results = response?.results || [];
-      console.log("Results:", results);
-      setStage(results);
-    } catch (error) {
-      console.error("Search error:", error);
-      setStage([]);
-    } finally {
-      setLoading(false);
+    if (searchValue.trim() === "") {
+      dispatch(fetchStages(""));
+    } else {
+      dispatch(searchStages(searchValue));
     }
   };
 
   const handleCardClick = (id: number) => {
     navigate(`/stages/${id}`);
   };
-
-  // const crumbs = [{ label: "Этапы", path: ROUTES.STAGES }];
 
   return (
     <div className={`container ${loading && "containerLoading"}`}>
@@ -62,13 +40,12 @@ export const StagesPage: FC = () => {
       <div className="top-bar">
         <InputField
           value={searchValue}
-          setValue={(value) => setSearchValue(value)}
+          setValue={(value) => dispatch(setSearchValue(value))}
           loading={loading}
           onSubmit={handleSearch}
           searchField={true}
           placeholder="Введите название этапа"
         />
-        <RequestBin stageRequestID={1} />
       </div>
       {loading && (
         <div className="loadingBg">
