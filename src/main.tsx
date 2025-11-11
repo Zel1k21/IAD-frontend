@@ -5,10 +5,11 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import App from "./App";
 import { registerSW } from "virtual:pwa-register";
+import { dest_root } from "./modules/target_config";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter basename="/IAD-frontend">
+    <BrowserRouter basename={dest_root}>
       <Provider store={store}>
         <App />
       </Provider>

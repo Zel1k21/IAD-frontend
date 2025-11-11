@@ -38,7 +38,7 @@
     flex-direction: row;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 700px) {
     .stages-grid-container {
         display: flex;
         flex-direction: column;

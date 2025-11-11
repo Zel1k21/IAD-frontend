@@ -1,21 +1,21 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
-// import fs from "fs";
-// import path from "path";
+import { dest_root, api_proxy_addr } from "./src/modules/target_config";
+import fs from "fs";
+import path from "path";
 
 export default defineConfig({
   server: {
-    // https: {
-    //   key: fs.readFileSync(path.resolve(__dirname, "cert.key")),
-    //   cert: fs.readFileSync(path.resolve(__dirname, "cert.crt")),
-    // },
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, "cert.key")),
+      cert: fs.readFileSync(path.resolve(__dirname, "cert.crt")),
+    },
     port: 3000,
     proxy: {
       "/api": {
-        target: "http://localhost:8080",
+        target: api_proxy_addr,
         changeOrigin: true,
-        //rewrite: (path) => path.replace(/^\/api/, ""),
         secure: false,
       },
     },
@@ -41,5 +41,5 @@ export default defineConfig({
       },
     }),
   ],
-  base: "/IAD-frontend/",
+  base: dest_root,
 });

@@ -33,13 +33,13 @@ export const StageCard: FC<Props> = ({
         <div className="card-title">
           <Card.Title>{title}</Card.Title>
         </div>
-        <Button
+        {/*<Button
           className="add-btn"
           onClick={buttonClickHandler}
           variant="primary"
         >
           Добавить
-        </Button>
+        </Button>*/}
         <Button
           className="details-btn"
           onClick={buttonClickHandler}

@@ -12,7 +12,6 @@ const App: React.FC = () => {
     <>
       <Navbar />
       <Container className="main-container">
-        {/*<BreadCrumbs crumbs={[{ label: ROUTE_LABELS.STAGES }]} />*/}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/stages" element={<StagesPage />} />

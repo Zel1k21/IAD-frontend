@@ -1,17 +1,46 @@
 import type { FC } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
+import { getStageRequestInfo } from "../modules/emissionAPI";
+import type { StageRequestInfo } from "../modules/emissionAPI";
 
-interface RequestBinProps {
-  stageRequestID?: string | number;
-}
+export const RequestBin: FC = () => {
+  const [stageRequestInfo, setStageRequestInfo] =
+    useState<StageRequestInfo | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export const RequestBin: FC<RequestBinProps> = ({ stageRequestID }) => {
-  const isDisabled = !stageRequestID;
+  useEffect(() => {
+    const fetchStageRequestInfo = async () => {
+      try {
+        setLoading(true);
+        const info = await getStageRequestInfo();
+        setStageRequestInfo(info);
+      } catch (error) {
+        console.error("Error fetching stage request info:", error);
+        setStageRequestInfo(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStageRequestInfo();
+  }, []);
+
+  const isDisabled = !stageRequestInfo || stageRequestInfo.items_count === 0;
+
+  if (loading) {
+    return (
+      <div className="request-bin request-bin-loading">
+        <Spinner animation="border" size="sm" />
+      </div>
+    );
+  }
 
   return (
     <Link
       className={`request-bin ${isDisabled ? "request_bin--disabled" : ""}`}
-      to={isDisabled ? "#" : `/stage_request/${stageRequestID}`}
+      to={isDisabled ? "#" : `/stage_request/${stageRequestInfo?.request_id}`}
       onClick={(e) => isDisabled && e.preventDefault()}
     >
       <img
@@ -19,6 +48,11 @@ export const RequestBin: FC<RequestBinProps> = ({ stageRequestID }) => {
         src="request_bin.png"
         alt="Request Bin"
       />
+      {stageRequestInfo && stageRequestInfo.items_count > 0 && (
+        <span className="request-bin-items">
+          {stageRequestInfo.items_count}
+        </span>
+      )}
     </Link>
   );
 };

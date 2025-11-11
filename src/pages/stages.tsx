@@ -7,19 +7,20 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setSearchValue } from "../store/stagesSlice";
 import { fetchStages, searchStages } from "../store/stagesThunks";
+import { RequestBin } from "../components/requestBin";
 
 export const StagesPage: FC = () => {
   const dispatch = useAppDispatch();
-  const { searchValue, loading, stages } = useAppSelector(
+  const { searchValue, loading, stages, loadedFromStorage } = useAppSelector(
     (state) => state.stagesFilter,
   );
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (stages.length === 0) {
+    if ((!loadedFromStorage || stages.length === 0) && !loading) {
       dispatch(fetchStages(""));
     }
-  }, [dispatch, stages.length]);
+  }, [dispatch, loadedFromStorage, loading, stages.length]);
 
   const handleSearch = async () => {
     if (searchValue.trim() === "") {
@@ -46,6 +47,8 @@ export const StagesPage: FC = () => {
           searchField={true}
           placeholder="Введите название этапа"
         />
+        {/*<img className="request-bin" src="request_bin.png" />*/}
+        <RequestBin />
       </div>
       {loading && (
         <div className="loadingBg">
