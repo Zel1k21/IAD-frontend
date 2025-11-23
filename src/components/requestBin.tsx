@@ -27,7 +27,7 @@ export const RequestBin: FC = () => {
     fetchStageRequestInfo();
   }, []);
 
-  const isDisabled = !stageRequestInfo || stageRequestInfo.items_count === 0;
+  const isDisabled = !stageRequestInfo || stageRequestInfo.item_count === -1;
 
   if (loading) {
     return (
@@ -48,10 +48,8 @@ export const RequestBin: FC = () => {
         src="request_bin.png"
         alt="Request Bin"
       />
-      {stageRequestInfo && stageRequestInfo.items_count > 0 && (
-        <span className="request-bin-items">
-          {stageRequestInfo.items_count}
-        </span>
+      {stageRequestInfo && stageRequestInfo.item_count > 0 && (
+        <span className="request-bin-items">{stageRequestInfo.item_count}</span>
       )}
     </Link>
   );

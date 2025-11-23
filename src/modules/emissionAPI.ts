@@ -2,7 +2,7 @@ import { dest_api } from "./target_config";
 
 export interface StageRequestInfo {
   request_id: number;
-  items_count: number;
+  item_count: number;
 }
 
 export interface Stages {
@@ -152,7 +152,7 @@ export const getStageRequestInfo = async (): Promise<StageRequestInfo> => {
     // Return mock data for development
     return {
       request_id: 1,
-      items_count: 0,
+      item_count: 0,
     };
   }
 };

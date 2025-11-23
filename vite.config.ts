@@ -4,6 +4,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import { dest_root, api_proxy_addr } from "./src/modules/target_config";
 import fs from "fs";
 import path from "path";
+import mkcert from "vite-plugin-mkcert";
 
 export default defineConfig({
   server: {
@@ -27,17 +28,39 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    mkcert(),
     VitePWA({
       registerType: "autoUpdate",
       devOptions: { enabled: true },
       manifest: {
-        name: "Tile Notes",
-        short_name: "Tile Notes",
-        start_url: "/",
+        name: "CO2 Emission calculator",
+        short_name: "CO2 Emission",
+        start_url: "/IAD-frontend/",
         display: "standalone",
         background_color: "#fdfdfd",
         theme_color: "#db4938",
         orientation: "portrait-primary",
+        icons: [
+          {
+            src: "logo192.png",
+            type: "image/png",
+            sizes: "192x192",
+          },
+          {
+            src: "logo512.png",
+            type: "image/png",
+            sizes: "512x512",
+          },
+        ],
+        screenshots: [
+          {
+            src: "stock.jpg",
+            sizes: "612x612",
+            type: "image/jpeg",
+            form_factor: "wide",
+            label: "stock",
+          },
+        ],
       },
     }),
   ],
