@@ -9,7 +9,6 @@
     gap: 1rem;
     padding: 0 3rem;
     display: flex;
-    align-items: center;
     z-index: 1000;
 }
 
@@ -46,6 +45,51 @@
 
 .navbar .stages-link.active {
     color: var(--primary-color);
+}
+
+.navbar .userInfo {
+    display: flex;
+    align-items: center;
+    color: var(--black-text);
+    font-size: var(--big-font-size);
+    font-weight: 500;
+    width: 10rem;
+    justify-content: end;
+}
+
+.navbar .login-btn {
+    background: linear-gradient(
+        135deg,
+        var(--button-color) 0%,
+        var(--active-primary-color) 100%
+    );
+    border: none;
+    border-radius: var(--button-border-radius);
+    color: white;
+    font-weight: 600;
+    font-size: var(--small-font-size);
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(32, 201, 151, 0.3);
+    text-transform: none;
+    letter-spacing: 0.5px;
+    margin-top: 0.4rem;
+}
+
+.navbar .login-btn:hover {
+    background: linear-gradient(
+        135deg,
+        var(--active-primary-color) 0%,
+        #147a5d 100%
+    );
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(32, 201, 151, 0.4);
+    color: white;
+}
+
+.navbar .login-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(32, 201, 151, 0.3);
 }
 
 @media (max-width: 1000px) {

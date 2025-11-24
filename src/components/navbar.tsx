@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Navbar as BootstrapNavbar, Nav, Container } from "react-bootstrap";
+import {
+  Navbar as BootstrapNavbar,
+  Nav,
+  Container,
+  Button,
+} from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { BreadCrumbs } from "./breadCrumbs";
 import { ROUTES } from "./routes";
 import "../styles/main.css";
 import { getStageByID } from "../modules/emissionAPI";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState, AppDispatch } from "../store";
+import { useNavigate } from "react-router-dom";
+import { logoutUserAsync } from "../store/userSlice";
 
 const useScreenSize = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -29,6 +38,19 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const [stageTitle, setStageTitle] = useState<string | null>(null);
   const isSmallScreen = useScreenSize();
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const username = useSelector((state: RootState) => state.user.username);
+
+  const isAuthorized = useSelector(
+    (state: RootState) => state.user.isAuthorized,
+  );
+
+  const handleExit = async () => {
+    await dispatch(logoutUserAsync());
+    navigate(`${ROUTES.HOME}`);
+  };
 
   const generateBreadcrumbs = (): { label: string; path?: string }[] => {
     const pathnames = location.pathname.split("/").filter((x) => x);
@@ -105,6 +127,25 @@ const Navbar: React.FC = () => {
               </Nav.Link>
             </Nav>
           </BootstrapNavbar.Collapse>
+        </Container>
+        <Container className="userInfo">
+          {isAuthorized == false && (
+            <Link to={ROUTES.LOGIN}>
+              <Button className="login-btn">Войти</Button>
+            </Link>
+          )}
+
+          {isAuthorized == true && (
+            <Button
+              variant="primary"
+              type="submit"
+              className="login-btn"
+              onClick={handleExit}
+            >
+              Выйти
+            </Button>
+          )}
+          <p> {username} </p>
         </Container>
       </BootstrapNavbar>
     </>

@@ -5,6 +5,7 @@ import Navbar from "./components/navbar";
 import { HomePage } from "./pages/home";
 import { StagesPage } from "./pages/stages";
 import { StagePage } from "./pages/stage";
+import { LoginPage } from "./pages/loginPage";
 import "./styles/App.css";
 
 const App: React.FC = () => {
@@ -16,6 +17,7 @@ const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/stages" element={<StagesPage />} />
           <Route path="/stages/:id" element={<StagePage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </Container>
     </>

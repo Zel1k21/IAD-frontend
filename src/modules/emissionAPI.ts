@@ -1,4 +1,5 @@
 import { dest_api } from "./target_config";
+import { Api } from "../modules/Api";
 
 export interface StageRequestInfo {
   request_id: number;
@@ -156,3 +157,24 @@ export const getStageRequestInfo = async (): Promise<StageRequestInfo> => {
     };
   }
 };
+
+const securityWorker = async (securityData: { accessToken: string } | null) => {
+  if (securityData?.accessToken) {
+    return {
+      headers: {
+        Authorization: `Bearer ${securityData.accessToken}`,
+      },
+    };
+  }
+  return {};
+};
+
+export const api = new Api({
+  baseURL: dest_api,
+  securityWorker,
+});
+
+export interface StageRequestInfo {
+  request_id: number;
+  item_count: number;
+}
