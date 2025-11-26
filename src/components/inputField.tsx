@@ -2,9 +2,9 @@ import type { FC } from "react";
 import "../styles/main.css";
 
 interface Props {
-  value: string;
-  setValue: (value: string) => void;
-  onSubmit: () => void;
+  value: string | number;
+  setValue?: (value: string) => void;
+  onSubmit?: () => void;
   loading?: boolean;
   searchField?: boolean;
   placeholder?: string;
@@ -24,7 +24,7 @@ export const InputField: FC<Props> = ({
     <input
       value={value}
       placeholder={placeholder}
-      onChange={(event) => setValue(event.target.value)}
+      onChange={(event) => setValue?.(event.target.value)}
       className="text-input"
     />
     {searchField && (

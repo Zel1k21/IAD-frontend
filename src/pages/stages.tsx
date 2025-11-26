@@ -68,6 +68,7 @@ export const StagesPage: FC = () => {
                 <StageCard
                   key={index}
                   buttonClickHandler={() => handleCardClick(item.id)}
+                  stage_id={item.id}
                   {...item}
                 />
               ))}

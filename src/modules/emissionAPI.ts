@@ -126,31 +126,14 @@ export const getStageByID = async (id: number): Promise<Stages | null> => {
 
 export const getStageRequestInfo = async (): Promise<StageRequestInfo> => {
   try {
-    console.log(
-      "Making API request to:",
-      `${dest_api}/stage-requests/stageRequestInfo`,
-    );
-    const response = await fetch(
-      `${dest_api}/stage-requests/stageRequestInfo`,
-      {
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    console.log("Response status:", response.status, response.ok);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data: StageRequestInfo = await response.json();
-    console.log("Response data:", data);
-    return data;
+    const response = await api.stageRequests.stageRequestInfoList();
+    console.log("Response data:", response.data);
+    return {
+      request_id: response.data.request_id || 1,
+      item_count: response.data.item_count || 0,
+    };
   } catch (error) {
     console.error("API Error in getStageRequestInfo:", error);
-    // Return mock data for development
     return {
       request_id: 1,
       item_count: 0,

@@ -49,13 +49,20 @@ export interface HandlerStageRequestDetailResponse {
   stage_request_to_stages?: HandlerStageRequestToStageDetailResponse[];
 }
 
+export interface HandlerStageRequestInfoResponse {
+  item_count?: number;
+  request_id?: number;
+}
+
 export interface HandlerStageRequestToStageDetailResponse {
   first_dimension_const?: number;
   first_dimension_name?: string;
+  image_url?: string;
   input_field_1?: number;
   input_field_2?: number;
   second_dimension_const?: number;
   second_dimension_name?: string;
+  stage_id?: number;
   stage_title?: string;
 }
 
@@ -376,6 +383,25 @@ export class Api<
         path: `/stage-requests`,
         method: "GET",
         query: query,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Get information about current user's draft request
+     *
+     * @tags stage-requests
+     * @name StageRequestInfoList
+     * @summary Get draft request info
+     * @request GET:/stage-requests/stageRequestInfo
+     * @secure
+     */
+    stageRequestInfoList: (params: RequestParams = {}) =>
+      this.request<HandlerStageRequestInfoResponse, Record<string, any>>({
+        path: `/stage-requests/stageRequestInfo`,
+        method: "GET",
+        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,

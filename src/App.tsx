@@ -6,6 +6,7 @@ import { HomePage } from "./pages/home";
 import { StagesPage } from "./pages/stages";
 import { StagePage } from "./pages/stage";
 import { LoginPage } from "./pages/loginPage";
+import { StageRequestPage } from "./pages/stageRequest";
 import "./styles/App.css";
 
 const App: React.FC = () => {
@@ -18,6 +19,7 @@ const App: React.FC = () => {
           <Route path="/stages" element={<StagesPage />} />
           <Route path="/stages/:id" element={<StagePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/stage_request/:id" element={<StageRequestPage />} />
         </Routes>
       </Container>
     </>

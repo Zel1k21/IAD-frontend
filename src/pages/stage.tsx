@@ -84,7 +84,7 @@ export const StagePage: FC = () => {
       <div className="page-stage--content">
         <img
           className="page-stage--image"
-          src={stage.image_url || "stock.jpg"}
+          src={stage.image_url || "/IAD-frontend/stock.jpg"}
           alt={stage.title}
           onError={(e) => {
             e.currentTarget.src = "stock.jpg";
