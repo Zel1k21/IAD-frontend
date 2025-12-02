@@ -767,7 +767,7 @@ export class Api<
       }),
 
     /**
-     * @description Create a new user account
+     * @description Create a new user account and automatically login
      *
      * @tags users
      * @name RegisterCreate
@@ -778,7 +778,7 @@ export class Api<
       request: HandlerRegisterRequest,
       params: RequestParams = {},
     ) =>
-      this.request<Record<string, any>, Record<string, any>>({
+      this.request<HandlerLoginResponse, Record<string, any>>({
         path: `/users/register`,
         method: "POST",
         body: request,

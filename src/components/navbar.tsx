@@ -54,7 +54,16 @@ const Navbar: React.FC = () => {
 
   const generateBreadcrumbs = (): { label: string; path?: string }[] => {
     const pathnames = location.pathname.split("/").filter((x) => x);
-    const crumbs = [];
+    const crumbs: { label: string; path?: string }[] = [];
+
+    // Исключаем страницы авторизации и профиля из breadcrumbs
+    if (
+      pathnames[0] === "login" ||
+      pathnames[0] === "register" ||
+      pathnames[0] === "profile"
+    ) {
+      return crumbs;
+    }
 
     if (pathnames[0] === "stages") {
       crumbs.push({ label: "Этапы", path: ROUTES.STAGES });
@@ -66,6 +75,11 @@ const Navbar: React.FC = () => {
           crumbs.push({ label, path: location.pathname });
         }
       }
+    }
+
+    if (pathnames[0] === "stage_request" && pathnames[1]) {
+      crumbs.push({ label: "Этапы", path: ROUTES.STAGES });
+      crumbs.push({ label: "Заявка", path: location.pathname });
     }
 
     return crumbs;
@@ -117,22 +131,29 @@ const Navbar: React.FC = () => {
             )}
           <BootstrapNavbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link
+              {/*<Nav.Link
                 as={Link}
                 to="/stages"
                 active={location.pathname === "/stages"}
                 className="stages-link"
               >
                 Этапы
-              </Nav.Link>
+              </Nav.Link>*/}
             </Nav>
           </BootstrapNavbar.Collapse>
         </Container>
         <Container className="userInfo">
           {isAuthorized == false && (
-            <Link to={ROUTES.LOGIN}>
-              <Button className="login-btn">Войти</Button>
-            </Link>
+            <>
+              <Link to={ROUTES.LOGIN}>
+                <Button className="login-btn">Войти</Button>
+              </Link>
+              <Link to={ROUTES.REGISTER}>
+                <Button className="register-btn" variant="outline-primary">
+                  Регистрация
+                </Button>
+              </Link>
+            </>
           )}
 
           {isAuthorized == true && (
@@ -145,7 +166,9 @@ const Navbar: React.FC = () => {
               Выйти
             </Button>
           )}
-          <p> {username} </p>
+          <Link to={ROUTES.PROFILE}>
+            <p className="username-link"> {username} </p>
+          </Link>
         </Container>
       </BootstrapNavbar>
     </>

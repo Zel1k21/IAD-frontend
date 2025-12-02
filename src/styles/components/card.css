@@ -115,3 +115,10 @@
     text-align: left;
     text-wrap: balance;
 }
+
+.stage-card-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}

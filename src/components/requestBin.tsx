@@ -27,7 +27,7 @@ export const RequestBin: FC = () => {
     fetchStageRequestInfo();
   }, []);
 
-  const isDisabled = !stageRequestInfo || stageRequestInfo.item_count === -1;
+  const isDisabled = !stageRequestInfo || stageRequestInfo.item_count < 1;
 
   if (loading) {
     return (

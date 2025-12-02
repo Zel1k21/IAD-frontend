@@ -74,6 +74,7 @@
     text-transform: none;
     letter-spacing: 0.5px;
     margin-top: 0.4rem;
+    margin-right: 0.5rem;
 }
 
 .navbar .login-btn:hover {
@@ -85,6 +86,48 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(32, 201, 151, 0.4);
     color: white;
+}
+
+.navbar .register-btn {
+    border: 2px solid var(--button-color);
+    border-radius: var(--button-border-radius);
+    color: var(--button-color);
+    font-weight: 600;
+    font-size: var(--small-font-size);
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+    background-color: transparent;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    margin-top: 0.4rem;
+}
+
+.navbar .register-btn:hover {
+    background-color: var(--button-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(32, 201, 151, 0.4);
+}
+
+.navbar .register-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(32, 201, 151, 0.3);
+}
+
+.username-link {
+    color: var(--black-text);
+    font-size: var(--big-font-size);
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.username-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
 }
 
 .navbar .login-btn:active {

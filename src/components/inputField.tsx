@@ -9,22 +9,22 @@ interface Props {
   searchField?: boolean;
   placeholder?: string;
   buttonTitle?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const InputField: FC<Props> = ({
   value,
   setValue,
   onSubmit,
-  // loading,
   searchField,
   placeholder,
-  // buttonTitle = "Искать",
+  onChange,
 }) => (
   <div className="input-field">
     <input
       value={value}
       placeholder={placeholder}
-      onChange={(event) => setValue?.(event.target.value)}
+      onChange={onChange || ((event) => setValue?.(event.target.value))}
       className="text-input"
     />
     {searchField && (

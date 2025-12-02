@@ -21,6 +21,8 @@ interface Props {
   second_dimension_name?: string;
   stage_id?: number;
   stage_result?: number;
+  onFirstFieldChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSecondFieldChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const StageCard: FC<Props> = ({
@@ -34,6 +36,8 @@ export const StageCard: FC<Props> = ({
   second_dimension_name,
   stage_result,
   stage_id,
+  onFirstFieldChange,
+  onSecondFieldChange,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const isAuthorized = useSelector(
@@ -118,6 +122,7 @@ export const StageCard: FC<Props> = ({
                 value={input_field_1 || ""}
                 searchField={false}
                 placeholder="Введите значение"
+                onChange={onFirstFieldChange}
               />
             </div>
           </div>
@@ -132,6 +137,7 @@ export const StageCard: FC<Props> = ({
                 value={input_field_2 || ""}
                 searchField={false}
                 placeholder="Введите значение"
+                onChange={onSecondFieldChange}
               />
             </div>
           </div>
