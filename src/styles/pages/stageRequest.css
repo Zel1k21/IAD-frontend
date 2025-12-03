@@ -60,30 +60,6 @@
     display: block;
 }
 
-.save-message {
-    padding: 0.4rem 0.65rem;
-    border-radius: var(--border-radius);
-    font-size: var(--small-font-size);
-    font-weight: 500;
-    text-align: center;
-    animation: fadeIn 0.3s ease;
-    margin-top: 0.5rem;
-    width: 100%;
-    max-width: 300px;
-}
-
-.save-message.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.save-message.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
 .save-button {
     background-color: transparent;
     border: 2px solid var(--button-color);
@@ -174,6 +150,36 @@
     color: #6c757d;
 }
 
+.form-button {
+    background-color: transparent;
+    border: 2px solid #0d6efd;
+    color: #0d6efd;
+    border-radius: var(--button-border-radius);
+    font-weight: 600;
+    font-size: var(--small-font-size);
+    padding: 0.4rem 0.65rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2);
+}
+
+.form-button:hover:not(:disabled) {
+    background-color: #0d6efd;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+}
+
+.form-button:active {
+    transform: translateY(0);
+}
+
+.form-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: transparent;
+    color: #0d6efd;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -193,14 +199,10 @@
 
     .save-button,
     .cancel-button,
-    .delete-button {
+    .delete-button,
+    .form-button {
         width: 100%;
         max-width: 300px;
         padding: 0.65rem 1.5rem;
-    }
-
-    .save-message {
-        max-width: 100%;
-        margin-top: 0.25rem;
     }
 }

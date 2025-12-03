@@ -8,6 +8,7 @@ import {
 } from "../store/stageRequestSlice";
 import { InputField } from "../components/inputField";
 import { StageCard } from "../components/stageCard";
+import { Notification } from "../components/Notification";
 import { Button } from "react-bootstrap";
 import { ROUTES } from "../components/routes";
 import {
@@ -17,6 +18,7 @@ import {
   deleteStageFromRequest,
   setStageData,
   updateStageInRequestAsync,
+  formStageRequestAsync,
 } from "../store/stageRequestSlice";
 import type { Stages, StageRequestInfo } from "../store/stageRequestSlice";
 
@@ -30,7 +32,6 @@ export const StageRequestPage: FC = () => {
     if (id) {
       dispatch(getStageRequest(Number(id))).then((result) => {
         if (getStageRequest.fulfilled.match(result)) {
-          // Сохраняем оригинальные данные при загрузке
           setOriginalStages([
             ...(result.payload.stage_request_to_stages || []),
           ]);
@@ -53,7 +54,11 @@ export const StageRequestPage: FC = () => {
 
   const isDraft = useSelector((state: RootState) => state.stageRequest.isDraft);
   const [isSaving, setIsSaving] = useState(false);
-  const [saveMessage, setSaveMessage] = useState("");
+  const [isForming, setIsForming] = useState(false);
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
   const [originalStages, setOriginalStages] = useState<Stages[]>([]);
   const [originalRequestInfo, setOriginalRequestInfo] = useState<
     StageRequestInfo | undefined
@@ -119,69 +124,119 @@ export const StageRequestPage: FC = () => {
   const handleRequestSave = async () => {
     if (id) {
       setIsSaving(true);
-      setSaveMessage("");
+      setNotification(null);
 
-      const requestParamsToSend = {
-        ...requestInfo,
-        id,
-      };
       try {
-        await dispatch(
-          updateStageRequest({
-            requestId: Number(id),
-            requestInfo: requestParamsToSend,
-          }),
-        ).unwrap();
-
-        for (const stage of stages) {
-          if (stage.stage_id) {
-            const updateData: {
-              inputField1?: number;
-              inputField2?: number;
-            } = {};
-
-            if (stage.input_field_1 !== undefined) {
-              updateData.inputField1 = stage.input_field_1;
-            }
-
-            if (stage.input_field_2 !== undefined) {
-              updateData.inputField2 = stage.input_field_2;
-            }
-
-            if (Object.keys(updateData).length > 0) {
-              await dispatch(
-                updateStageInRequestAsync({
-                  requestId: Number(id),
-                  stageId: stage.stage_id,
-                  ...updateData,
-                }),
-              ).unwrap();
-            }
-          }
-        }
-
-        // Обновляем оригинальные данные после успешного сохранения
-        setOriginalStages([...stages]);
-        setOriginalRequestInfo({ ...requestInfo });
-
-        setSaveMessage("Данные успешно сохранены!");
-
-        setTimeout(() => {
-          setSaveMessage("");
-        }, 3000);
+        await handleRequestSaveInternal();
+        setNotification({
+          message: "Данные успешно сохранены!",
+          type: "success",
+        });
       } catch (error) {
         console.error("Ошибка при сохранении:", error);
-        setSaveMessage("Произошла ошибка при сохранении данных");
-
-        // Автоматически скрыть сообщение об ошибке через 5 секунд
-        setTimeout(() => {
-          setSaveMessage("");
-        }, 5000);
+        setNotification({
+          message: "Произошла ошибка при сохранении данных",
+          type: "error",
+        });
       } finally {
         setIsSaving(false);
         setHasChanges(false);
       }
     }
+  };
+
+  const handleFormRequest = async () => {
+    if (id) {
+      // Подтверждение перед формированием заявки
+      const isConfirmed = window.confirm(
+        "Вы уверены, что хотите сформировать заявку? После формирования заявка будет отправлена модератору и вы не сможете её редактировать.",
+      );
+
+      if (!isConfirmed) {
+        return;
+      }
+
+      setIsForming(true);
+      setNotification(null);
+
+      try {
+        // Сначала сохраняем все изменения
+        await handleRequestSaveInternal();
+
+        // Затем формируем заявку
+        await dispatch(formStageRequestAsync(Number(id))).unwrap();
+
+        setNotification({
+          message: "Заявка успешно сформирована и отправлена модератору!",
+          type: "success",
+        });
+
+        // Перенаправить через 3 секунды
+        setTimeout(() => {
+          navigate(ROUTES.STAGES);
+        }, 3000);
+      } catch (error) {
+        console.error("Ошибка при формировании заявки:", error);
+        setNotification({
+          message: "Произошла ошибка при формировании заявки",
+          type: "error",
+        });
+      } finally {
+        setIsForming(false);
+      }
+    }
+  };
+
+  // Внутренняя функция сохранения для переиспользования
+  const handleRequestSaveInternal = async (): Promise<void> => {
+    if (!id) return;
+
+    const requestParamsToSend = {
+      ...requestInfo,
+      id,
+    };
+
+    // Сохраняем название продукта
+    await dispatch(
+      updateStageRequest({
+        requestId: Number(id),
+        requestInfo: requestParamsToSend,
+      }),
+    ).unwrap();
+
+    // Сохраняем данные полей для каждого этапа
+    for (const stage of stages) {
+      if (stage.stage_id) {
+        const updateData: {
+          inputField1?: number;
+          inputField2?: number;
+        } = {};
+
+        // Проверяем, изменились ли значения полей
+        if (stage.input_field_1 !== undefined) {
+          updateData.inputField1 = stage.input_field_1;
+        }
+
+        if (stage.input_field_2 !== undefined) {
+          updateData.inputField2 = stage.input_field_2;
+        }
+
+        // Отправляем обновление только если есть данные для отправки
+        if (Object.keys(updateData).length > 0) {
+          await dispatch(
+            updateStageInRequestAsync({
+              requestId: Number(id),
+              stageId: stage.stage_id,
+              ...updateData,
+            }),
+          ).unwrap();
+        }
+      }
+    }
+
+    // Обновляем оригинальные данные после успешного сохранения
+    setOriginalStages([...stages]);
+    setOriginalRequestInfo({ ...requestInfo });
   };
 
   const handleCancelChanges = () => {
@@ -191,13 +246,11 @@ export const StageRequestPage: FC = () => {
     if (originalRequestInfo) {
       dispatch(setRequestData({ ...originalRequestInfo }));
     }
-    setSaveMessage("Изменения отменены");
+    setNotification({
+      message: "Изменения отменены",
+      type: "info",
+    });
     setHasChanges(false);
-
-    // Автоматически скрыть сообщение через 3 секунды
-    setTimeout(() => {
-      setSaveMessage("");
-    }, 3000);
   };
 
   const handleDeleteStage = async (stageId: number | undefined) => {
@@ -280,13 +333,6 @@ export const StageRequestPage: FC = () => {
             {isSaving ? "Сохранение..." : "Сохранить"}
           </Button>
 
-          {saveMessage && (
-            <div
-              className={`save-message ${saveMessage.includes("ошибка") ? "error" : "success"}`}
-            >
-              {saveMessage}
-            </div>
-          )}
           <Button
             className="cancel-button"
             onClick={handleCancelChanges}
@@ -296,12 +342,35 @@ export const StageRequestPage: FC = () => {
             Отменить изменения
           </Button>
           {isDraft && (
-            <Button className="delete-button" onClick={handleDelete}>
-              Удалить
-            </Button>
+            <>
+              <Button
+                className="form-button"
+                onClick={handleFormRequest}
+                disabled={isSaving || isForming || hasChanges}
+                title={
+                  hasChanges
+                    ? "Сохраните изменения перед формированием заявки"
+                    : "Отправить заявку модератору"
+                }
+              >
+                {isForming ? "Формирование..." : "Сформировать"}
+              </Button>
+              <Button className="delete-button" onClick={handleDelete}>
+                Удалить
+              </Button>
+            </>
           )}
         </div>
       </div>
+
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          duration={notification.type === "error" ? 5000 : 3000}
+          onClose={() => setNotification(null)}
+        />
+      )}
     </div>
   );
 };

@@ -47,7 +47,7 @@ export const StageCard: FC<Props> = ({
   const handleAdd = async () => {
     if (stage_id) {
       await dispatch(addStageToRequest(stage_id));
-      await dispatch(fetchStageRequestInfo()); // Для обновления отображения состояния иконки "корзины"
+      await dispatch(fetchStageRequestInfo());
     }
   };
   if (variant === "default") {

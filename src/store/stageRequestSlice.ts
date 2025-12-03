@@ -119,6 +119,14 @@ export const updateStageInRequestAsync = createAsyncThunk(
   },
 );
 
+export const formStageRequestAsync = createAsyncThunk(
+  "stageRequest/formStageRequestAsync",
+  async (requestId: number) => {
+    const response = await api.stageRequests.formUpdate(requestId);
+    return response.data;
+  },
+);
+
 export const updateStageInStageRequest = createAsyncThunk(
   "stageRequest/updateStageInStageRequest",
   async ({
@@ -237,12 +245,20 @@ const stageRequestSlice = createSlice({
       .addCase(updateStageInStageRequest.rejected, (state, action) => {
         state.error = `Failed to update stage in stage request: ${action.error.message}`;
       })
-      .addCase(updateStageInRequestAsync.fulfilled, () => {
-        // Данные уже обновлены локально через setStageData
-        // Здесь можно добавить дополнительную логику при необходимости
-      })
+      .addCase(updateStageInRequestAsync.fulfilled, () => {})
       .addCase(updateStageInRequestAsync.rejected, (state, action) => {
         state.error = `Failed to update stage fields: ${action.error.message}`;
+      })
+      .addCase(formStageRequestAsync.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(formStageRequestAsync.fulfilled, (state) => {
+        // После формирования заявки она больше не является черновиком
+        state.isDraft = false;
+        state.error = null;
+      })
+      .addCase(formStageRequestAsync.rejected, (state, action) => {
+        state.error = `Failed to form stage request: ${action.error.message}`;
       });
   },
 });
