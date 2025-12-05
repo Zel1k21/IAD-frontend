@@ -8,7 +8,7 @@ import {
 } from "../store/stageRequestSlice";
 import { InputField } from "../components/inputField";
 import { StageCard } from "../components/stageCard";
-import { Notification } from "../components/Notification";
+import { Notification } from "../components/notification";
 import { Button } from "react-bootstrap";
 import { ROUTES } from "../components/routes";
 import {
@@ -37,7 +37,7 @@ export const StageRequestPage: FC = () => {
           ]);
           setOriginalRequestInfo({
             productName: result.payload.product_name,
-            created_at: result.payload.created_at,
+            createdAt: result.payload.created_at,
           });
         }
       });

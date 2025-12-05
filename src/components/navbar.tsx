@@ -40,12 +40,17 @@ const Navbar: React.FC = () => {
   const isSmallScreen = useScreenSize();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [dropdownCollapsed, setDropdownCollapsed] = useState(false);
 
   const username = useSelector((state: RootState) => state.user.username);
 
   const isAuthorized = useSelector(
     (state: RootState) => state.user.isAuthorized,
   );
+
+  const switchDropdown = () => {
+    setDropdownCollapsed(!dropdownCollapsed);
+  };
 
   const handleExit = async () => {
     await dispatch(logoutUserAsync());
@@ -56,7 +61,6 @@ const Navbar: React.FC = () => {
     const pathnames = location.pathname.split("/").filter((x) => x);
     const crumbs: { label: string; path?: string }[] = [];
 
-    // Исключаем страницы авторизации и профиля из breadcrumbs
     if (
       pathnames[0] === "login" ||
       pathnames[0] === "register" ||
@@ -129,46 +133,52 @@ const Navbar: React.FC = () => {
                 <BreadCrumbs crumbs={crumbs} />
               </Container>
             )}
-          <BootstrapNavbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              {/*<Nav.Link
-                as={Link}
-                to="/stages"
-                active={location.pathname === "/stages"}
-                className="stages-link"
+          <div className="userInfo">
+            <div className="dropdown-root">
+              <Button className="dropdown-toggle" onClick={switchDropdown}>
+                Страницы
+              </Button>
+              <div
+                className={
+                  "dropdown-menu " +
+                  (dropdownCollapsed ? "dropdown-collapsed" : "")
+                }
               >
-                Этапы
-              </Nav.Link>*/}
-            </Nav>
-          </BootstrapNavbar.Collapse>
-        </Container>
-        <Container className="userInfo">
-          {isAuthorized == false && (
-            <>
-              <Link to={ROUTES.LOGIN}>
-                <Button className="login-btn">Войти</Button>
-              </Link>
-              <Link to={ROUTES.REGISTER}>
-                <Button className="register-btn" variant="outline-primary">
-                  Регистрация
-                </Button>
-              </Link>
-            </>
-          )}
+                <Link to={ROUTES.STAGES} className="dropdown-item">
+                  Этапы
+                </Link>
+                <Link to={ROUTES.REQUESTS} className="dropdown-item">
+                  Заявки
+                </Link>
+              </div>
+            </div>
+            {isAuthorized == false && (
+              <>
+                <Link to={ROUTES.LOGIN}>
+                  <Button className="login-btn">Войти</Button>
+                </Link>
+                <Link to={ROUTES.REGISTER}>
+                  <Button className="register-btn" variant="outline-primary">
+                    Регистрация
+                  </Button>
+                </Link>
+              </>
+            )}
 
-          {isAuthorized == true && (
-            <Button
-              variant="primary"
-              type="submit"
-              className="login-btn"
-              onClick={handleExit}
-            >
-              Выйти
-            </Button>
-          )}
-          <Link to={ROUTES.PROFILE}>
-            <p className="username-link"> {username} </p>
-          </Link>
+            {isAuthorized == true && (
+              <Button
+                variant="primary"
+                type="submit"
+                className="login-btn"
+                onClick={handleExit}
+              >
+                Выйти
+              </Button>
+            )}
+            <Link to={ROUTES.PROFILE}>
+              <p className="username-link"> {username} </p>
+            </Link>
+          </div>
         </Container>
       </BootstrapNavbar>
     </>

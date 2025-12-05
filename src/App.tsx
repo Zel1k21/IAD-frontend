@@ -9,6 +9,8 @@ import { LoginPage } from "./pages/loginPage";
 import { RegisterPage } from "./pages/registerPage";
 import { ProfilePage } from "./pages/profilePage";
 import { StageRequestPage } from "./pages/stageRequest";
+import { RequestsListPage } from "./pages/requestsListPage";
+
 import "./styles/App.css";
 
 const App: React.FC = () => {
@@ -24,6 +26,7 @@ const App: React.FC = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/stage_request/:id" element={<StageRequestPage />} />
+          <Route path="/requests" element={<RequestsListPage />} />
         </Routes>
       </Container>
     </>

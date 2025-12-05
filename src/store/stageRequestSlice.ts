@@ -15,8 +15,10 @@ export interface Stages {
 }
 
 export interface StageRequestInfo {
-  productName?: string | null;
-  created_at?: string | null;
+  productName?: string;
+  createdAt?: string;
+  closedAt?: string;
+  formedAt?: string;
 }
 
 interface StageRequestBundle {
@@ -25,7 +27,7 @@ interface StageRequestBundle {
   stages: Stages[];
   requestInfo?: StageRequestInfo;
   isDraft: boolean;
-  error?: string | null;
+  error?: string;
 }
 
 const initialState: StageRequestBundle = {
@@ -33,11 +35,10 @@ const initialState: StageRequestBundle = {
   count: NaN,
   stages: [],
   requestInfo: {
-    productName: null,
-    created_at: null,
+    productName: undefined,
+    createdAt: undefined,
   },
   isDraft: false,
-  error: null,
 };
 
 export const getStageRequest = createAsyncThunk(
@@ -211,7 +212,7 @@ const stageRequestSlice = createSlice({
           state.requestId = id;
           state.requestInfo = {
             productName: product_name,
-            created_at: created_at,
+            createdAt: created_at,
           };
           state.stages = stage_request_to_stages;
           state.isDraft = true;
@@ -223,8 +224,8 @@ const stageRequestSlice = createSlice({
         state.stages = [];
         state.isDraft = false;
         state.requestInfo = {
-          productName: null,
-          created_at: null,
+          productName: undefined,
+          createdAt: undefined,
         };
       })
       .addCase(updateStageRequest.fulfilled, (state, action) => {
@@ -250,12 +251,11 @@ const stageRequestSlice = createSlice({
         state.error = `Failed to update stage fields: ${action.error.message}`;
       })
       .addCase(formStageRequestAsync.pending, (state) => {
-        state.error = null;
+        state.error = undefined;
       })
       .addCase(formStageRequestAsync.fulfilled, (state) => {
-        // После формирования заявки она больше не является черновиком
         state.isDraft = false;
-        state.error = null;
+        state.error = undefined;
       })
       .addCase(formStageRequestAsync.rejected, (state, action) => {
         state.error = `Failed to form stage request: ${action.error.message}`;

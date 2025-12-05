@@ -84,14 +84,14 @@ export interface HandlerStagesFilterResponse {
 }
 
 export interface HandlerStagesRequestsFilterResponse {
-  ClosedAt?: string;
-  CreatedAt?: string;
-  FormedAt?: string;
-  ModeratorID?: number;
-  ProductName?: string;
-  Status?: number;
-  UserID?: number;
+  closedAt?: string;
+  createdAt?: string;
+  formedAt?: string;
   id?: number;
+  moderatorID?: number;
+  productName?: string;
+  status?: number;
+  userID?: number;
 }
 
 export interface HandlerUpdateProfileRequest {
