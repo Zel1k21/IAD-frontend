@@ -19,6 +19,7 @@ export interface StageRequestInfo {
   createdAt?: string;
   closedAt?: string;
   formedAt?: string;
+  calculationResult?: number;
 }
 
 interface StageRequestBundle {
@@ -206,13 +207,19 @@ const stageRequestSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getStageRequest.fulfilled, (state, action) => {
-        const { stage_request_to_stages, product_name, id, created_at } =
-          action.payload;
+        const {
+          stage_request_to_stages,
+          product_name,
+          id,
+          created_at,
+          calculationResult,
+        } = action.payload;
         if (stage_request_to_stages && id) {
           state.requestId = id;
           state.requestInfo = {
             productName: product_name,
             createdAt: created_at,
+            calculationResult: calculationResult,
           };
           state.stages = stage_request_to_stages;
           state.isDraft = true;

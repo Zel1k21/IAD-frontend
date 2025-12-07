@@ -324,6 +324,12 @@ export const StageRequestPage: FC = () => {
             <h1>К сожалению, пока ничего не найдено :(</h1>
           </section>
         )}
+        {!isDraft && (
+          <div className="calculation-result">
+            <h2>Результат расчета:</h2>
+            <p>{requestInfo?.calculationResult}</p>
+          </div>
+        )}
         <div className="buttons-panel">
           <Button
             className="save-button"

@@ -43,6 +43,7 @@ export interface HandlerRegisterRequest {
 }
 
 export interface HandlerStageRequestDetailResponse {
+  calculationResult?: number;
   created_at?: string;
   id?: number;
   product_name?: string;
@@ -84,6 +85,7 @@ export interface HandlerStagesFilterResponse {
 }
 
 export interface HandlerStagesRequestsFilterResponse {
+  calculationResult?: number;
   closedAt?: string;
   createdAt?: string;
   formedAt?: string;
@@ -367,6 +369,7 @@ export class Api<
      * @name StageRequestsList
      * @summary Get stage requests
      * @request GET:/stage-requests
+     * @secure
      */
     stageRequestsList: (
       query?: {
@@ -383,6 +386,7 @@ export class Api<
         path: `/stage-requests`,
         method: "GET",
         query: query,
+        secure: true,
         type: ContentType.Json,
         format: "json",
         ...params,

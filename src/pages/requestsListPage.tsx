@@ -1,19 +1,60 @@
-import { type FC } from "react";
-// import type { Request, RequestsList } from "../store/requestsSlice";
-import { useSelector } from "react-redux";
-import { type RootState } from "../store";
+import { type FC, useEffect } from "react";
+import { getAllStageRequests } from "../store/requestsSlice";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState, AppDispatch } from "../store";
 
 export const RequestsListPage: FC = () => {
   const { requests } = useSelector((state: RootState) => state.requests);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleStatusFilterChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const status = e.target.value;
+    switch (status) {
+      case "pending":
+        dispatch(getAllStageRequests({ status: 1 }));
+        break;
+      case "formed":
+        dispatch(getAllStageRequests({ status: 3 }));
+        break;
+      case "approved":
+        dispatch(getAllStageRequests({ status: 4 }));
+        break;
+      case "rejected":
+        dispatch(getAllStageRequests({ status: 5 }));
+        break;
+      default:
+        dispatch(getAllStageRequests());
+        break;
+    }
+  };
+
+  const handleDateFromChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dateFrom = e.target.value;
+    dispatch(getAllStageRequests({ dateFrom }));
+  };
+
+  const handleDateToChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dateTo = e.target.value;
+    dispatch(getAllStageRequests({ dateTo }));
+  };
+
+  useEffect(() => {
+    dispatch(getAllStageRequests());
+  }, [dispatch]);
+
   return (
     <div className="requests-list-page">
       <h1 className="requests-label">Заявки</h1>
       <div className="filters">
         <div className="filter-item">
           <label className="filter-label">Статус</label>
-          <select className="filter-select">
+          <select className="filter-select" onChange={handleStatusFilterChange}>
             <option value="all">Все</option>
-            <option value="pending">В работе</option>
+            <option value="pending">Черновик</option>
+            <option value="formed">Сформирована</option>
             <option value="approved">Одобрена</option>
             <option value="rejected">Отклонена</option>
           </select>
@@ -23,6 +64,7 @@ export const RequestsListPage: FC = () => {
           <input
             className="filter-input"
             placeholder="Дата начала"
+            onChange={handleDateFromChange}
             type="date"
           />
         </div>
@@ -31,6 +73,7 @@ export const RequestsListPage: FC = () => {
           <input
             className="filter-input"
             placeholder="Дата окончания"
+            onChange={handleDateToChange}
             type="date"
           />
         </div>
@@ -43,17 +86,38 @@ export const RequestsListPage: FC = () => {
             <th>Дата создания</th>
             <th>Дата оформления</th>
             <th>Дата завершения</th>
+            <th>Выбросы CO2</th>
           </tr>
         </thead>
         <tbody>
-          {requests.length > 0 ? (
+          {requests.length ? (
             requests.map((request) => (
               <tr key={request.requestId}>
                 <td>{request.requestId}</td>
-                <td>{request.status}</td>
-                <td>{request.createdAt}</td>
-                <td>{request.formedAt}</td>
-                <td>{request.closedAt}</td>
+                {(() => {
+                  switch (request.status) {
+                    case 1:
+                      return <td>Черновик</td>;
+                    case 3:
+                      return <td>Сформирована</td>;
+                    case 4:
+                      return <td>Одобрена</td>;
+                    default:
+                      return <td>Отклонена</td>;
+                  }
+                })()}
+                <td>{request.createdAt?.toLocaleString()}</td>
+                {!request.closedAt && !request.formedAt ? (
+                  <td>Не оформлена</td>
+                ) : (
+                  <td>{request.formedAt?.toLocaleString()}</td>
+                )}
+                {!request.closedAt && request.formedAt ? (
+                  <td>Не завершена</td>
+                ) : (
+                  <td>{request.closedAt?.toLocaleString()}</td>
+                )}
+                <td>{request.calculationResult}</td>
               </tr>
             ))
           ) : (

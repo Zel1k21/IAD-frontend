@@ -34,7 +34,6 @@ export const StageCard: FC<Props> = ({
   input_field_1,
   input_field_2,
   second_dimension_name,
-  stage_result,
   stage_id,
   onFirstFieldChange,
   onSecondFieldChange,
@@ -141,9 +140,9 @@ export const StageCard: FC<Props> = ({
               />
             </div>
           </div>
-          <p className="stage-card--result">
+          {/*<p className="stage-card--result">
             Выбросы CO2 на этапе: {stage_result}
-          </p>
+          </p>*/}
         </Card>
       </div>
     );

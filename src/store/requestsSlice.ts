@@ -5,10 +5,17 @@ import { type HandlerStagesRequestsFilterResponse } from "../modules/Api";
 export interface Request {
   requestId: number;
   status: number;
-  createdAt?: string;
-  closedAt?: string;
-  formedAt?: string;
+  createdAt?: Date;
+  closedAt?: Date;
+  formedAt?: Date;
   productName?: string;
+  calculationResult?: number;
+}
+
+export interface RequestsFilter {
+  status?: number;
+  dateFrom?: string;
+  dateTo?: string;
 }
 
 export interface RequestsList {
@@ -24,11 +31,14 @@ const initialState: RequestsList = {
 
 export const getAllStageRequests = createAsyncThunk(
   "stageRequest/getAllStageRequests",
-  async () => {
-    const response = await api.stageRequests.stageRequestsList();
+  async (filter?: RequestsFilter) => {
+    const response = await api.stageRequests.stageRequestsList(filter);
     return response.data;
   },
 );
+
+const isEmptyDate = (dateStr?: string) =>
+  !dateStr || dateStr === "0001-01-01T00:00:00Z";
 
 const requestsSlice = createSlice({
   name: "requests",
@@ -42,10 +52,19 @@ const requestsSlice = createSlice({
         state.requests = requestsData.map((item) => ({
           requestId: item.id ?? 0,
           status: item.status ?? 0,
-          createdAt: item.createdAt || undefined,
-          closedAt: item.closedAt || undefined,
-          formedAt: item.formedAt || undefined,
+          createdAt: isEmptyDate(item.createdAt)
+            ? undefined
+            : new Date(item.createdAt!),
+
+          closedAt: isEmptyDate(item.closedAt)
+            ? undefined
+            : new Date(item.closedAt!),
+
+          formedAt: isEmptyDate(item.formedAt)
+            ? undefined
+            : new Date(item.formedAt!),
           productName: item.productName || undefined,
+          calculationResult: item.calculationResult || undefined,
         }));
         state.count = requestsData.length;
       })

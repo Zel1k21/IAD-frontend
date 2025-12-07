@@ -147,9 +147,11 @@ const Navbar: React.FC = () => {
                 <Link to={ROUTES.STAGES} className="dropdown-item">
                   Этапы
                 </Link>
-                <Link to={ROUTES.REQUESTS} className="dropdown-item">
-                  Заявки
-                </Link>
+                {isAuthorized && (
+                  <Link to={ROUTES.REQUESTS} className="dropdown-item">
+                    Заявки
+                  </Link>
+                )}
               </div>
             </div>
             {isAuthorized == false && (
