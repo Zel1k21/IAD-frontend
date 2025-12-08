@@ -1,10 +1,15 @@
-import { type FC, useEffect } from "react";
+import { type FC, useEffect, useState } from "react";
 import { getAllStageRequests } from "../store/requestsSlice";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export const RequestsListPage: FC = () => {
   const { requests } = useSelector((state: RootState) => state.requests);
+  const [requestClicked, setRequestClicked] = useState(false);
+  const [requestId, setRequestId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -39,6 +44,15 @@ export const RequestsListPage: FC = () => {
   const handleDateToChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const dateTo = e.target.value;
     dispatch(getAllStageRequests({ dateTo }));
+  };
+
+  const handleRequestClick = (id: number) => {
+    setRequestId(id);
+    setRequestClicked(true);
+  };
+
+  const handleTransitionButtonClick = () => {
+    navigate(`/stage-request/${requestId}`);
   };
 
   useEffect(() => {
@@ -92,7 +106,10 @@ export const RequestsListPage: FC = () => {
         <tbody>
           {requests.length ? (
             requests.map((request) => (
-              <tr key={request.requestId}>
+              <tr
+                key={request.requestId}
+                onClick={() => handleRequestClick(request.requestId)}
+              >
                 <td>{request.requestId}</td>
                 {(() => {
                   switch (request.status) {
@@ -127,6 +144,14 @@ export const RequestsListPage: FC = () => {
           )}
         </tbody>
       </table>
+      {requestClicked && (
+        <Button
+          className="transition-button"
+          onClick={handleTransitionButtonClick}
+        >
+          Перейти к заявке
+        </Button>
+      )}
     </div>
   );
 };

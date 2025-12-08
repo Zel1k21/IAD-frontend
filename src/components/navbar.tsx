@@ -81,7 +81,7 @@ const Navbar: React.FC = () => {
       }
     }
 
-    if (pathnames[0] === "stage_request" && pathnames[1]) {
+    if (pathnames[0] === "stage-request" && pathnames[1]) {
       crumbs.push({ label: "Этапы", path: ROUTES.STAGES });
       crumbs.push({ label: "Заявка", path: location.pathname });
     }

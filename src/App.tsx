@@ -25,7 +25,7 @@ const App: React.FC = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/stage_request/:id" element={<StageRequestPage />} />
+          <Route path="/stage-request/:id" element={<StageRequestPage />} />
           <Route path="/requests" element={<RequestsListPage />} />
         </Routes>
       </Container>

@@ -20,6 +20,7 @@ export interface StageRequestInfo {
   closedAt?: string;
   formedAt?: string;
   calculationResult?: number;
+  status?: number;
 }
 
 interface StageRequestBundle {
@@ -213,6 +214,7 @@ const stageRequestSlice = createSlice({
           id,
           created_at,
           calculationResult,
+          status,
         } = action.payload;
         if (stage_request_to_stages && id) {
           state.requestId = id;
@@ -220,9 +222,11 @@ const stageRequestSlice = createSlice({
             productName: product_name,
             createdAt: created_at,
             calculationResult: calculationResult,
+            status: status,
           };
           state.stages = stage_request_to_stages;
-          state.isDraft = true;
+          if (state.requestInfo.status === 1) state.isDraft = true;
+          else state.isDraft = false;
         }
       })
       .addCase(deleteStageRequest.fulfilled, (state) => {

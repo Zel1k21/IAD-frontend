@@ -118,3 +118,27 @@
 .requests-list-page .request-table .columns-name th {
     border-bottom: none;
 }
+
+.transition-button {
+    background-color: transparent;
+    border: 2px solid var(--button-color);
+    color: var(--button-color);
+    border-radius: var(--button-border-radius);
+    font-weight: 600;
+    font-size: var(--small-font-size);
+    padding: 0.4rem 0.65rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(32, 201, 151, 0.2);
+    margin-top: 1rem;
+}
+
+.transition-button:hover:not(:disabled) {
+    background-color: var(--button-color);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(32, 201, 151, 0.3);
+}
+
+.transition-button:active {
+    transform: translateY(0);
+}

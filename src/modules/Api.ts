@@ -48,6 +48,7 @@ export interface HandlerStageRequestDetailResponse {
   id?: number;
   product_name?: string;
   stage_request_to_stages?: HandlerStageRequestToStageDetailResponse[];
+  status?: number;
 }
 
 export interface HandlerStageRequestInfoResponse {

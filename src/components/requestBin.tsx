@@ -40,7 +40,7 @@ export const RequestBin: FC = () => {
   return (
     <Link
       className={`request-bin ${isDisabled ? "request_bin--disabled" : ""}`}
-      to={isDisabled ? "#" : `/stage_request/${stageRequestInfo?.request_id}`}
+      to={isDisabled ? "#" : `/stage-request/${stageRequestInfo?.request_id}`}
       onClick={(e) => isDisabled && e.preventDefault()}
     >
       <img

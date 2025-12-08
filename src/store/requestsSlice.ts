@@ -54,15 +54,15 @@ const requestsSlice = createSlice({
           status: item.status ?? 0,
           createdAt: isEmptyDate(item.createdAt)
             ? undefined
-            : new Date(item.createdAt!),
+            : new Date(item.createdAt || ""),
 
           closedAt: isEmptyDate(item.closedAt)
             ? undefined
-            : new Date(item.closedAt!),
+            : new Date(item.closedAt || ""),
 
           formedAt: isEmptyDate(item.formedAt)
             ? undefined
-            : new Date(item.formedAt!),
+            : new Date(item.formedAt || ""),
           productName: item.productName || undefined,
           calculationResult: item.calculationResult || undefined,
         }));

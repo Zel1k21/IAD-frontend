@@ -4,7 +4,7 @@ export const ROUTES = {
   STAGE: "/stages/:id",
   LOGIN: "/login",
   REGISTER: "/register",
-  STAGEREQUEST: "/stage_request/:requestId",
+  STAGEREQUEST: "/stage-request/:requestId",
   PROFILE: "/profile",
   REQUESTS: "/requests",
 };

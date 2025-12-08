@@ -330,24 +330,25 @@ export const StageRequestPage: FC = () => {
             <p>{requestInfo?.calculationResult}</p>
           </div>
         )}
-        <div className="buttons-panel">
-          <Button
-            className="save-button"
-            onClick={handleRequestSave}
-            disabled={isSaving}
-          >
-            {isSaving ? "Сохранение..." : "Сохранить"}
-          </Button>
+        {isDraft && (
+          <div className="buttons-panel">
+            <Button
+              className="save-button"
+              onClick={handleRequestSave}
+              disabled={isSaving}
+            >
+              {isSaving ? "Сохранение..." : "Сохранить"}
+            </Button>
 
-          <Button
-            className="cancel-button"
-            onClick={handleCancelChanges}
-            variant="outline-secondary"
-            disabled={isSaving || !hasChanges}
-          >
-            Отменить изменения
-          </Button>
-          {isDraft && (
+            <Button
+              className="cancel-button"
+              onClick={handleCancelChanges}
+              variant="outline-secondary"
+              disabled={isSaving || !hasChanges}
+            >
+              Отменить изменения
+            </Button>
+
             <>
               <Button
                 className="form-button"
@@ -365,8 +366,8 @@ export const StageRequestPage: FC = () => {
                 Удалить
               </Button>
             </>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {notification && (
