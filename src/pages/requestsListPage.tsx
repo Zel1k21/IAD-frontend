@@ -18,9 +18,6 @@ export const RequestsListPage: FC = () => {
   ) => {
     const status = e.target.value;
     switch (status) {
-      case "pending":
-        dispatch(getAllStageRequests({ status: 1 }));
-        break;
       case "formed":
         dispatch(getAllStageRequests({ status: 3 }));
         break;
@@ -113,8 +110,6 @@ export const RequestsListPage: FC = () => {
                 <td>{request.requestId}</td>
                 {(() => {
                   switch (request.status) {
-                    case 1:
-                      return <td>Черновик</td>;
                     case 3:
                       return <td>Сформирована</td>;
                     case 4:
