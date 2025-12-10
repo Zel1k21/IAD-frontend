@@ -10,6 +10,11 @@
  * ---------------------------------------------------------------
  */
 
+export interface HandlerAsyncUpdateEmissionCalculationResponse {
+  calculation_result?: number;
+  request_id?: number;
+}
+
 export interface HandlerCreateStageRequest {
   description?: string;
   first_dimension_const: number;
@@ -95,6 +100,7 @@ export interface HandlerStagesRequestsFilterResponse {
   productName?: string;
   status?: number;
   userID?: number;
+  username?: string;
 }
 
 export interface HandlerUpdateProfileRequest {
@@ -388,6 +394,27 @@ export class Api<
         method: "GET",
         query: query,
         secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Update the emission calculation result for a stage request (called by external calculation service)
+     *
+     * @tags stage-requests
+     * @name AsyncUpdateCalculationUpdate
+     * @summary Asynchronously update emission calculation result
+     * @request PUT:/stage-requests/asyncUpdateCalculation
+     */
+    asyncUpdateCalculationUpdate: (
+      request: HandlerAsyncUpdateEmissionCalculationResponse,
+      params: RequestParams = {},
+    ) =>
+      this.request<Record<string, any>, Record<string, any>>({
+        path: `/stage-requests/asyncUpdateCalculation`,
+        method: "PUT",
+        body: request,
         type: ContentType.Json,
         format: "json",
         ...params,

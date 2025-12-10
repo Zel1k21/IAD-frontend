@@ -9,9 +9,12 @@ export const RequestsListPage: FC = () => {
   const { requests } = useSelector((state: RootState) => state.requests);
   const [requestClicked, setRequestClicked] = useState(false);
   const [requestId, setRequestId] = useState<number | null>(null);
+  const [selectedUser, setSelectedUser] = useState<string>("");
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
+
+  const isModerator = useSelector((state: RootState) => state.user.isModerator);
 
   const handleStatusFilterChange = (
     e: React.ChangeEvent<HTMLSelectElement>,
@@ -34,13 +37,18 @@ export const RequestsListPage: FC = () => {
   };
 
   const handleDateFromChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const dateFrom = e.target.value;
-    dispatch(getAllStageRequests({ dateFrom }));
+    const date = e.target.value;
+    dispatch(getAllStageRequests({ date_from: date || undefined }));
   };
 
   const handleDateToChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const dateTo = e.target.value;
-    dispatch(getAllStageRequests({ dateTo }));
+    const date = e.target.value;
+    dispatch(getAllStageRequests({ date_to: date || undefined }));
+  };
+
+  const handleUserSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedUser = e.target.value;
+    setSelectedUser(selectedUser);
   };
 
   const handleRequestClick = (id: number) => {
@@ -59,12 +67,11 @@ export const RequestsListPage: FC = () => {
   return (
     <div className="requests-list-page">
       <h1 className="requests-label">Заявки</h1>
-      <div className="filters">
+      <div className={"filters " + (isModerator ? "moderator" : "")}>
         <div className="filter-item">
           <label className="filter-label">Статус</label>
           <select className="filter-select" onChange={handleStatusFilterChange}>
-            <option value="all">Все</option>
-            <option value="pending">Черновик</option>
+            <option defaultValue="all">Все</option>
             <option value="formed">Сформирована</option>
             <option value="approved">Одобрена</option>
             <option value="rejected">Отклонена</option>
@@ -88,6 +95,21 @@ export const RequestsListPage: FC = () => {
             type="date"
           />
         </div>
+        <div className="filter-item">
+          <label className="filter-label">Пользователь</label>
+          <select className="filter-select" onChange={handleUserSelection}>
+            <option value="">Все пользователи</option>
+            {requests.length
+              ? [...new Set(requests.map((r) => r.username))].map(
+                  (username) => (
+                    <option key={username} value={username}>
+                      {username}
+                    </option>
+                  ),
+                )
+              : null}
+          </select>
+        </div>
       </div>
       <table className="request-table">
         <thead className="columns-name">
@@ -98,40 +120,49 @@ export const RequestsListPage: FC = () => {
             <th>Дата оформления</th>
             <th>Дата завершения</th>
             <th>Выбросы CO2</th>
+            {isModerator && <th>Пользователь</th>}
           </tr>
         </thead>
         <tbody>
           {requests.length ? (
-            requests.map((request) => (
-              <tr
-                key={request.requestId}
-                onClick={() => handleRequestClick(request.requestId)}
-              >
-                <td>{request.requestId}</td>
-                {(() => {
-                  switch (request.status) {
-                    case 3:
-                      return <td>Сформирована</td>;
-                    case 4:
-                      return <td>Одобрена</td>;
-                    default:
-                      return <td>Отклонена</td>;
-                  }
-                })()}
-                <td>{request.createdAt?.toLocaleString()}</td>
-                {!request.closedAt && !request.formedAt ? (
-                  <td>Не оформлена</td>
-                ) : (
-                  <td>{request.formedAt?.toLocaleString()}</td>
-                )}
-                {!request.closedAt && request.formedAt ? (
-                  <td>Не завершена</td>
-                ) : (
-                  <td>{request.closedAt?.toLocaleString()}</td>
-                )}
-                <td>{request.calculationResult}</td>
-              </tr>
-            ))
+            requests.map(
+              (request) =>
+                (selectedUser === request.username || selectedUser === "") && (
+                  <tr
+                    key={request.requestId}
+                    onClick={() => handleRequestClick(request.requestId)}
+                  >
+                    <td>{request.requestId}</td>
+                    {(() => {
+                      switch (request.status) {
+                        case 3:
+                          return <td>Сформирована</td>;
+                        case 4:
+                          return <td>Одобрена</td>;
+                        default:
+                          return <td>Отклонена</td>;
+                      }
+                    })()}
+                    <td>{request.createdAt}</td>
+                    {!request.closedAt && !request.formedAt ? (
+                      <td>Не оформлена</td>
+                    ) : (
+                      <td>{request.formedAt}</td>
+                    )}
+                    {!request.closedAt && request.formedAt ? (
+                      <td>Не завершена</td>
+                    ) : (
+                      <td>{request.closedAt}</td>
+                    )}
+                    <td className="center-column-data">
+                      {request.calculationResult}
+                    </td>
+                    {isModerator && (
+                      <td className="center-column-data">{request.username}</td>
+                    )}
+                  </tr>
+                ),
+            )
           ) : (
             <tr>
               <td colSpan={5}>Нет заявок</td>

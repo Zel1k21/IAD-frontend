@@ -142,3 +142,11 @@
 .transition-button:active {
     transform: translateY(0);
 }
+
+.center-column-data {
+    text-align: center;
+}
+
+.filters.moderator {
+    width: 60rem;
+}
