@@ -39,6 +39,20 @@ export const getAllStageRequests = createAsyncThunk(
   },
 );
 
+export const resolveRequest = createAsyncThunk(
+  "stageRequest/resolveRequest",
+  async (requestId: number) => {
+    await api.stageRequests.resolveUpdate(requestId);
+  },
+);
+
+export const rejectRequest = createAsyncThunk(
+  "stageRequest/rejectRequest",
+  async (requestId: number) => {
+    await api.stageRequests.rejectUpdate(requestId);
+  },
+);
+
 const requestsSlice = createSlice({
   name: "requests",
   initialState,

@@ -3,16 +3,5 @@
   "identifier": "default",
   "description": "enables the default permissions",
   "windows": ["main"],
-  "permissions": [
-    "cors-fetch:default",
-    {
-      "identifier": "http:default",
-      "allow": [{ "url": "http://192.168.0.104" }],
-      "deny": []
-    },
-    "core:default",
-    "http:allow-fetch",
-    "http:allow-fetch-read-body",
-    "http:allow-fetch-send"
-  ]
+  "permissions": ["core:default"]
 }

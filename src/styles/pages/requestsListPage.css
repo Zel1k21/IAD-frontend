@@ -150,3 +150,42 @@
 .filters.moderator {
     width: 60rem;
 }
+
+.requests-amount {
+    font-weight: 500;
+    font-size: var(--medium-font-size);
+    margin-top: 1rem;
+}
+
+.table-with-buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.requests-list-buttons {
+    margin-top: 1.85rem;
+    margin-left: 1rem;
+}
+
+.completion-buttons {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1.5rem;
+}
+
+.request-resolve-button {
+    cursor: pointer;
+    border-radius: var(--button-border-radius);
+}
+
+.request-resolve-button:hover {
+    background-color: var(--white-button-hover-background);
+}
+
+.request-resolve-button.disabled {
+    opacity: 0;
+}
+
+.reject-button {
+    margin-left: 1rem;
+}

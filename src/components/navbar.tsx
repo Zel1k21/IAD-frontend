@@ -123,7 +123,7 @@ const Navbar: React.FC = () => {
         <Container>
           <BootstrapNavbar.Brand>
             <Nav.Link as={Link} to="/" active={location.pathname === "/"}>
-              <img className="navbar-brand-img" src="/IAD-frontend/logo.svg" />
+              <img className="navbar-brand-img" src="/logo.svg" />
             </Nav.Link>
             Расчет углеродного следа
           </BootstrapNavbar.Brand>

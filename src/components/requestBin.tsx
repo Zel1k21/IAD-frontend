@@ -45,7 +45,7 @@ export const RequestBin: FC = () => {
     >
       <img
         className="stage-request-button"
-        src="/IAD-frontend/request_bin.png"
+        src="/request_bin.png"
         alt="Request Bin"
       />
       {stageRequestInfo && stageRequestInfo.item_count > 0 && (

@@ -1,7 +1,7 @@
-const target_tauri = false;
+const target_tauri = true;
 
 export const api_proxy_addr = "http://localhost:8082";
 export const img_proxy_addr = "http://localhost:9000";
-export const dest_api = target_tauri ? api_proxy_addr : "/api";
-export const dest_root = target_tauri ? "" : "/IAD-frontend/";
+export const dest_api = target_tauri ? api_proxy_addr + "/api" : "/api";
+export const dest_root = target_tauri ? "/" : "/IAD-frontend";
 export const dest_img = target_tauri ? img_proxy_addr : "/stageimages";
