@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
 import { useNavigate } from "react-router-dom";
 import { logoutUserAsync } from "../store/userSlice";
+import { dest_root } from "../modules/target_config";
 
 const useScreenSize = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -123,7 +124,7 @@ const Navbar: React.FC = () => {
         <Container>
           <BootstrapNavbar.Brand>
             <Nav.Link as={Link} to="/" active={location.pathname === "/"}>
-              <img className="navbar-brand-img" src="/logo.svg" />
+              <img className="navbar-brand-img" src={dest_root + "/logo.svg"} />
             </Nav.Link>
             Расчет углеродного следа
           </BootstrapNavbar.Brand>

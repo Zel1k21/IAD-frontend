@@ -21,6 +21,7 @@ import {
   formStageRequestAsync,
 } from "../store/stageRequestSlice";
 import type { Stages, StageRequestInfo } from "../store/stageRequestSlice";
+import { dest_root } from "../modules/target_config";
 
 export const StageRequestPage: FC = () => {
   const { id } = useParams();
@@ -32,13 +33,20 @@ export const StageRequestPage: FC = () => {
     if (id) {
       dispatch(getStageRequest(Number(id))).then((result) => {
         if (getStageRequest.fulfilled.match(result)) {
-          setOriginalStages([
-            ...(result.payload.stage_request_to_stages || []),
-          ]);
+          const stagesData = result.payload.stage_request_to_stages || [];
+          setOriginalStages([...stagesData]);
           setOriginalRequestInfo({
             productName: result.payload.product_name,
             createdAt: result.payload.created_at,
           });
+          // Инициализируем stageChanges для всех карточек как false
+          const initialStageChanges: Record<number, boolean> = {};
+          stagesData.forEach((stage) => {
+            if (stage.stage_id) {
+              initialStageChanges[stage.stage_id] = false;
+            }
+          });
+          setStageChanges(initialStageChanges);
         }
       });
     }
@@ -64,6 +72,8 @@ export const StageRequestPage: FC = () => {
     StageRequestInfo | undefined
   >(undefined);
   const [hasChanges, setHasChanges] = useState(false);
+  const [savingStages, setSavingStages] = useState<Record<number, boolean>>({});
+  const [stageChanges, setStageChanges] = useState<Record<number, boolean>>({});
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,6 +111,7 @@ export const StageRequestPage: FC = () => {
         }),
       );
       setHasChanges(true);
+      setStageChanges((prev) => ({ ...prev, [stageId]: true }));
     }
   };
 
@@ -118,6 +129,7 @@ export const StageRequestPage: FC = () => {
         }),
       );
       setHasChanges(true);
+      setStageChanges((prev) => ({ ...prev, [stageId]: true }));
     }
   };
 
@@ -237,6 +249,8 @@ export const StageRequestPage: FC = () => {
     // Обновляем оригинальные данные после успешного сохранения
     setOriginalStages([...stages]);
     setOriginalRequestInfo({ ...requestInfo });
+    // Сбрасываем все флаги изменений карточек
+    setStageChanges({});
   };
 
   const handleCancelChanges = () => {
@@ -251,6 +265,66 @@ export const StageRequestPage: FC = () => {
       type: "info",
     });
     setHasChanges(false);
+    // Сбрасываем все флаги изменений карточек
+    setStageChanges({});
+  };
+
+  const handleSaveStage = async (stageId: number | undefined) => {
+    if (!stageId || !id) return;
+
+    setSavingStages((prev) => ({ ...prev, [stageId]: true }));
+    setNotification(null);
+
+    try {
+      const stage = stages.find((s) => s.stage_id === stageId);
+      if (!stage) return;
+
+      const updateData: {
+        inputField1?: number;
+        inputField2?: number;
+      } = {};
+
+      // Проверяем, изменились ли значения полей
+      if (stage.input_field_1 !== undefined) {
+        updateData.inputField1 = stage.input_field_1;
+      }
+
+      if (stage.input_field_2 !== undefined) {
+        updateData.inputField2 = stage.input_field_2;
+      }
+
+      // Отправляем обновление только если есть данные для отправки
+      if (Object.keys(updateData).length > 0) {
+        await dispatch(
+          updateStageInRequestAsync({
+            requestId: Number(id),
+            stageId: stageId,
+            ...updateData,
+          }),
+        ).unwrap();
+      }
+
+      // Обновляем оригинальные данные для этой карточки
+      setOriginalStages((prev) =>
+        prev.map((s) => (s.stage_id === stageId ? { ...stage } : s)),
+      );
+
+      // Сбрасываем флаг изменений для этой карточки
+      setStageChanges((prev) => ({ ...prev, [stageId]: false }));
+
+      setNotification({
+        message: `Изменения на карточке "${stage.stage_title}" успешно сохранены!`,
+        type: "success",
+      });
+    } catch (error) {
+      console.error("Ошибка при сохранении карточки:", error);
+      setNotification({
+        message: "Произошла ошибка при сохранении карточки",
+        type: "error",
+      });
+    } finally {
+      setSavingStages((prev) => ({ ...prev, [stageId]: false }));
+    }
   };
 
   const handleDeleteStage = async (stageId: number | undefined) => {
@@ -265,6 +339,17 @@ export const StageRequestPage: FC = () => {
         dispatch(
           setStages(stages.filter((stage) => stage.stage_id !== stageId)),
         );
+        // Удаляем состояния для удаленной карточки
+        setSavingStages((prev) => {
+          const newState = { ...prev };
+          delete newState[stageId];
+          return newState;
+        });
+        setStageChanges((prev) => {
+          const newState = { ...prev };
+          delete newState[stageId];
+          return newState;
+        });
       } catch (error) {
         console.error(error);
       }
@@ -303,19 +388,61 @@ export const StageRequestPage: FC = () => {
                 }
               />
               {isDraft && (
-                <Button
-                  className="stage-delete-button"
-                  onClick={() => handleDeleteStage(item.stage_id)}
-                >
-                  <img
-                    className="bin-icon bin-icon-closed"
-                    src="/IAD-frontend/closed_bin.png"
-                  />
-                  <img
-                    className="bin-icon bin-icon-opened"
-                    src="/IAD-frontend/opened_bin.png"
-                  />
-                </Button>
+                <div className="stage-card-buttons">
+                  <Button
+                    className="stage-save-button"
+                    onClick={() => handleSaveStage(item.stage_id)}
+                    disabled={
+                      savingStages[item.stage_id || 0] ||
+                      false ||
+                      !stageChanges[item.stage_id || 0]
+                    }
+                    title={
+                      !stageChanges[item.stage_id || 0]
+                        ? "Нет изменений для сохранения"
+                        : "Сохранить изменения на этой карточке"
+                    }
+                  >
+                    <svg
+                      width="35px"
+                      height="35px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                      <g
+                        id="SVGRepo_tracerCarrier"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke="#CCCCCC"
+                        stroke-width="0.192"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        {" "}
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M18.1716 1C18.702 1 19.2107 1.21071 19.5858 1.58579L22.4142 4.41421C22.7893 4.78929 23 5.29799 23 5.82843V20C23 21.6569 21.6569 23 20 23H4C2.34315 23 1 21.6569 1 20V4C1 2.34315 2.34315 1 4 1H18.1716ZM4 3C3.44772 3 3 3.44772 3 4V20C3 20.5523 3.44772 21 4 21L5 21L5 15C5 13.3431 6.34315 12 8 12L16 12C17.6569 12 19 13.3431 19 15V21H20C20.5523 21 21 20.5523 21 20V6.82843C21 6.29799 20.7893 5.78929 20.4142 5.41421L18.5858 3.58579C18.2107 3.21071 17.702 3 17.1716 3H17V5C17 6.65685 15.6569 8 14 8H10C8.34315 8 7 6.65685 7 5V3H4ZM17 21V15C17 14.4477 16.5523 14 16 14L8 14C7.44772 14 7 14.4477 7 15L7 21L17 21ZM9 3H15V5C15 5.55228 14.5523 6 14 6H10C9.44772 6 9 5.55228 9 5V3Z"
+                          fill="#0F0F0F"
+                        ></path>{" "}
+                      </g>
+                    </svg>
+                  </Button>
+                  <Button
+                    className="stage-delete-button"
+                    onClick={() => handleDeleteStage(item.stage_id)}
+                  >
+                    <img
+                      className="bin-icon bin-icon-closed"
+                      src={dest_root + "/closed_bin.png"}
+                    />
+                    <img
+                      className="bin-icon bin-icon-opened"
+                      src={dest_root + "/opened_bin.png"}
+                    />
+                  </Button>
+                </div>
               )}
             </div>
           ))

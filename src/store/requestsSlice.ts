@@ -60,6 +60,11 @@ const requestsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getAllStageRequests.fulfilled, (state, action) => {
+        if (!action.payload) {
+          state.requests = [];
+          state.count = 0;
+          return;
+        }
         const requestsData: HandlerStagesRequestsFilterResponse[] =
           action.payload;
         state.requests = requestsData.map((item) => ({

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
 import { getStageRequestInfo } from "../modules/emissionAPI";
 import type { StageRequestInfo } from "../modules/emissionAPI";
+import { dest_root } from "../modules/target_config";
 
 export const RequestBin: FC = () => {
   const [stageRequestInfo, setStageRequestInfo] =
@@ -45,7 +46,7 @@ export const RequestBin: FC = () => {
     >
       <img
         className="stage-request-button"
-        src="/request_bin.png"
+        src={dest_root + "/request_bin.png"}
         alt="Request Bin"
       />
       {stageRequestInfo && stageRequestInfo.item_count > 0 && (

@@ -47,7 +47,6 @@ export const StagesPage: FC = () => {
           searchField={true}
           placeholder="Введите название этапа"
         />
-        {/*<img className="request-bin" src="request_bin.png" />*/}
         <RequestBin />
       </div>
       {loading && (

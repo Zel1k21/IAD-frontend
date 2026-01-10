@@ -8,12 +8,14 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import type { RequestsFilter } from "../store/requestsSlice";
 
 export const RequestsListPage: FC = () => {
   const { requests } = useSelector((state: RootState) => state.requests);
   const [requestClicked, setRequestClicked] = useState(false);
   const [requestId, setRequestId] = useState<number | null>(null);
   const [selectedUser, setSelectedUser] = useState<string>("");
+  const [filters, setFilters] = useState<RequestsFilter>({});
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -23,25 +25,27 @@ export const RequestsListPage: FC = () => {
     e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const status = e.target.value;
+    let statusValue: number | undefined;
     switch (status) {
       case "formed":
-        dispatch(getAllStageRequests({ status: 3 }));
+        statusValue = 3;
         break;
       case "approved":
-        dispatch(getAllStageRequests({ status: 4 }));
+        statusValue = 4;
         break;
       case "rejected":
-        dispatch(getAllStageRequests({ status: 5 }));
+        statusValue = 5;
         break;
       default:
-        dispatch(getAllStageRequests());
+        statusValue = undefined;
         break;
     }
+    setFilters({ ...filters, status: statusValue });
   };
 
   const handleDateFromChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
-    dispatch(getAllStageRequests({ date_from: date || undefined }));
+    setFilters((prev) => ({ ...prev, date_from: date || undefined }));
   };
 
   const handleRequestResolve = (requestId: number) => {
@@ -54,7 +58,7 @@ export const RequestsListPage: FC = () => {
 
   const handleDateToChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
-    dispatch(getAllStageRequests({ date_to: date || undefined }));
+    setFilters((prev) => ({ ...prev, date_to: date || undefined }));
   };
 
   const handleUserSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -71,9 +75,15 @@ export const RequestsListPage: FC = () => {
     navigate(`/stage-request/${requestId}`);
   };
 
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return "";
+    const [year, month, day] = dateStr.split("-");
+    return `${day}.${month}.${year}`;
+  };
+
   useEffect(() => {
-    dispatch(getAllStageRequests());
-  }, [dispatch]);
+    dispatch(getAllStageRequests(filters));
+  }, [dispatch, filters]);
 
   return (
     <div className="requests-list-page">
@@ -158,16 +168,16 @@ export const RequestsListPage: FC = () => {
                             return <td>Отклонена</td>;
                         }
                       })()}
-                      <td>{request.createdAt}</td>
+                      <td>{formatDate(request.createdAt || "")}</td>
                       {!request.closedAt && !request.formedAt ? (
                         <td>Не оформлена</td>
                       ) : (
-                        <td>{request.formedAt}</td>
+                        <td>{formatDate(request.formedAt || "")}</td>
                       )}
                       {!request.closedAt && request.formedAt ? (
                         <td>Не завершена</td>
                       ) : (
-                        <td>{request.closedAt}</td>
+                        <td>{formatDate(request.closedAt || "")}</td>
                       )}
                       <td className="center-column-data">
                         {request.calculationResult}
@@ -189,6 +199,7 @@ export const RequestsListPage: FC = () => {
         </table>
         <div className="requests-list-buttons">
           {requests.length &&
+            isModerator &&
             requests.map((request) => (
               <div className="completion-buttons" key={request.requestId}>
                 <svg

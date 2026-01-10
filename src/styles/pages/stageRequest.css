@@ -206,3 +206,13 @@
         padding: 0.65rem 1.5rem;
     }
 }
+
+.stage-save-button {
+    background-color: transparent;
+    border: none;
+}
+
+.save_button_svg {
+    width: 40px;
+    height: 40px;
+}
